@@ -1,0 +1,119 @@
+{
+  "name": "form-data-validator",
+  "version": "1.0.0",
+  "description": "A helper for working with the HTML5 constraint validation API",
+  "author": "Sten Van den Bergh",
+  "license": "MIT",
+  "main": "lib/app.bundle.js",
+  "browserslist": [
+    "defaults"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stenvdb/form-data-validator.git"
+  },
+  "platoonConfig": {
+    "dirPublic": "lib",
+    "dirClient": "src",
+    "entryPoint": "privacyBanner.js"
+  },
+  "babel": {
+    "extends": "./platoon-boilerplate/config/.babelrc"
+  },
+  "eslintConfig": {
+    "extends": "./platoon-boilerplate/config/eslint.js"
+  },
+  "stylelint": {
+    "extends": "./platoon-boilerplate/config/stylelint.js"
+  },
+  "scripts": {
+    "compile": "better-npm-run compile",
+    "compile:dev": "better-npm-run compile:dev",
+    "compile:prod": "better-npm-run compile:prod",
+    "server": "better-npm-run server",
+    "watch": "better-npm-run watch"
+  },
+  "betterScripts": {
+    "watch": {
+      "command": "babel-node platoon-boilerplate/bin/watch",
+      "env": {
+        "NODE_ENV": "development",
+        "DEBUG": "app:*"
+      }
+    },
+    "server": {
+      "command": "babel-node platoon-boilerplate/bin/dev-server",
+      "env": {
+        "NODE_ENV": "development",
+        "DEBUG": "app:*"
+      }
+    },
+    "compile": {
+      "command": "babel-node platoon-boilerplate/bin/compile",
+      "env": {
+        "DEBUG": "app:*"
+      }
+    },
+    "compile:dev": {
+      "command": "babel-node platoon-boilerplate/bin/compile",
+      "env": {
+        "NODE_ENV": "development",
+        "DEBUG": "app:*"
+      }
+    },
+    "compile:prod": {
+      "command": "babel-node platoon-boilerplate/bin/compile",
+      "env": {
+        "NODE_ENV": "production",
+        "BABEL_ENV": "production",
+        "DEBUG": "app:*"
+      }
+    }
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.46",
+    "@babel/core": "^7.0.0-beta.46",
+    "@babel/node": "^7.0.0-beta.46",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.46",
+    "@babel/preset-env": "^7.0.0-beta.46",
+    "@babel/preset-stage-0": "^7.0.0-beta.46",
+    "@babel/register": "^7.0.0-beta.46",
+    "autoprefixer": "^8.4.1",
+    "babel-loader": "^8.0.0-beta",
+    "better-npm-run": "^0.1.0",
+    "clean-webpack-plugin": "^0.1.19",
+    "css-loader": "^0.28.10",
+    "css-mqpacker": "^6.0.2",
+    "debug": "^3.0.1",
+    "eslint": "^4.18.2",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-compat": "^2.2.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^1.1.11",
+    "ip": "^1.1.4",
+    "lodash": "^4.17.10",
+    "node-sass": "^4.9.0",
+    "optimize-css-assets-webpack-plugin": "^4.0.1",
+    "postcss-loader": "^2.1.4",
+    "postcss-normalize": "^4.0.0",
+    "raw-loader": "^0.5.1",
+    "resolve-url-loader": "^2.3.0",
+    "sass-loader": "^7.0.1",
+    "style-loader": "^0.21.0",
+    "stylelint": "^9.1.2",
+    "stylelint-config-standard": "^18.2.0",
+    "stylelint-webpack-plugin": "^0.10.4",
+    "svg-sprite-loader": "^3.7.1",
+    "svg-url-loader": "^2.3.2",
+    "svgo": "^1.0.5",
+    "svgo-loader": "^2.1.0",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.6.0",
+    "webpack-dev-server": "^3.1.4",
+    "webpack-manifest-plugin": "^2.0.2"
+  }
+}
