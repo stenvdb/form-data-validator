@@ -1,7 +1,7 @@
-🔧 Bear in mind that although I use this myself on a number of sites in production, I'm still working on getting the documentation right. 🔧
+🔧 **Bear in mind that although I use this myself on a number of sites in production, I'm still working on getting the documentation right.** 🔧
 
 # form-data-validator
-A helper for working with the HTML5 (constraint validation API)[https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#the-constraint-validation-api]. Providing some tools to easily extend or override native html5 form validation.
+A helper for working with the HTML5 [constraint validation API](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#the-constraint-validation-api). Providing some tools to easily extend or override native html5 form validation.
 
 ## Installation
 Form Data Validator supports [npm](https://www.npmjs.com/package/form-data-validator)
