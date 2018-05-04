@@ -1,16 +1,8 @@
 // import isEmail from 'validator/lib/isEmail';
 
 export default class FormDataValidator {
-  constructor() {
-    this.forms = [];
-    this.errorMessages = [];
-  }
-
-  getAllForms(selector, options) {
-    const forms = document.querySelectorAll(selector);
-    this.forms = [...forms];
-
-    Array.from(this.forms).forEach((form) => {
+  static getAllForms(selector, options) {
+    Array.from([...document.querySelectorAll(selector)]).forEach((form) => {
       FormDataValidator.validateForm(form, options);
     });
   }
@@ -30,27 +22,27 @@ export default class FormDataValidator {
     });
   }
 
-  static isValid(form, options) {
+  static isValid(form, options = {}) {
     let formvalid = true;
 
     Array.from(form.querySelectorAll('input:not([type="hidden"]),select,textarea')).forEach((field) => {
       formvalid = !FormDataValidator
-        .validateField(field, options.rules, form) ? false : formvalid;
+        .validateField(field, options, form) ? false : formvalid;
 
       field.addEventListener('blur', () => {
         formvalid = !FormDataValidator
-          .validateField(field, options.rules, form) ? false : formvalid;
+          .validateField(field, options, form) ? false : formvalid;
       });
       field.addEventListener('change', () => {
         formvalid = !FormDataValidator
-          .validateField(field, options.rules, form) ? false : formvalid;
+          .validateField(field, options, form) ? false : formvalid;
       });
     });
 
     return formvalid;
   }
 
-  static validateField(field, options = { methods: {}, rules: {} }, form) {
+  static validateField(field, options = {}, form) {
     let isValid = true;
 
     // First check native html 5 validation
@@ -68,20 +60,24 @@ export default class FormDataValidator {
     }
 
     // Loop over custom methods to override browser default check
-    Object.keys(options.methods).forEach((method) => {
-      if (field.getAttribute('type') === method) {
-        isValid = !options.methods[method](field) ? false : isValid;
-      }
-      return isValid;
-    });
+    if (typeof options.methods !== 'undefined') {
+      Object.keys(options.methods).forEach((method) => {
+        if (field.getAttribute('type') === method) {
+          isValid = !options.methods[method](field) ? false : isValid;
+        }
+        return isValid;
+      });
+    }
 
     // Loop over custom rules to override browser default check
-    Object.keys(options.rules).forEach((rule) => {
-      if (field.id === rule) {
-        isValid = !options.rules[rule](field) ? false : isValid;
-      }
-      return isValid;
-    });
+    if (typeof options.rules !== 'undefined') {
+      Object.keys(options.rules).forEach((rule) => {
+        if (field.id === rule) {
+          isValid = !options.rules[rule](field) ? false : isValid;
+        }
+        return isValid;
+      });
+    }
 
     if (isValid) {
       FormDataValidator.removeError(field, form);
@@ -118,7 +114,7 @@ export default class FormDataValidator {
     if (label != null) label.classList.remove('error');
   }
 
-  validateAllForms(selector = 'form', options = { methods: {}, rules: {} }) {
-    this.getAllForms(selector, options);
+  static validateAllForms(selector = 'form', options = {}) {
+    FormDataValidator.getAllForms(selector, options);
   }
 }
