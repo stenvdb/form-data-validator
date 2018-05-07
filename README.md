@@ -30,12 +30,12 @@ FormDataValidator.validateForm('.js-validate', { /* options */ });
 
 ## Options
 
-```customTypes```
+### ```customTypes```
 
 You can override the built-in html5 validation rules for input types. This can come in handy to provide a better email validation. By default `
 email@email` will validate because this is a valid email address format. You could implement your own email regular expression to override this. I reccomend the excellen [validator.js](https://github.com/chriso/validator.js/) library.
 
-### Example
+#### Example
 ```
 import isEmail from 'validator/lib/isEmail';
 
@@ -49,11 +49,11 @@ FormDataValidator.validateForm('form', {
 
 This can also be used to provide a regular expression for password input fields, or a specific kind of url input type validation.
 
-```rules```
+### ```rules```
 
 Add extra validation rules. These rules are mapped to your field's id. A few use cases for this would be a password field that must match a password repeat field. For this example to work make sure your password input type has a `data-equal-to` attribute:
 
-### Example
+#### Example
 ```
 import equals from 'validator/lib/equals';
 
@@ -69,10 +69,10 @@ FormDataValidator.validateForm(form, {
 
 Another use case would be validating a chekcbox group where there has to be at least 1 checked input:
 
-### Example
+#### Example
 ```
 const form = document.querySelector('form');
-FormDataValidator.validateForm(form, { 
+FormDataValidator.validateForm(form, {
   rules: [{
     field: '[type="checkbox"]',
     rule: (field) => {
