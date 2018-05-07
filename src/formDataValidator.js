@@ -1,5 +1,3 @@
-// import isEmail from 'validator/lib/isEmail';
-
 export default class FormDataValidator {
   static getAllForms(selector, options) {
     Array.from([...document.querySelectorAll(selector)]).forEach((form) => {
@@ -7,7 +5,16 @@ export default class FormDataValidator {
     });
   }
 
-  static validateForm(form, options = {}) {
+  static validateAllForms(selector = 'form', options = {}) {
+    FormDataValidator.getAllForms(selector, options);
+  }
+
+  static validateForm(el, options = {}) {
+    let form = el;
+    if (typeof form === 'string') {
+      form = document.querySelector(el);
+    }
+
     form.noValidate = true;
 
     form.isValid = () => this.isValid(form, options);
@@ -60,10 +67,10 @@ export default class FormDataValidator {
     }
 
     // Loop over custom methods to override browser default check
-    if (typeof options.methods !== 'undefined') {
-      Object.keys(options.methods).forEach((method) => {
-        if (field.getAttribute('type') === method) {
-          isValid = !options.methods[method](field) ? false : isValid;
+    if (typeof options.customTypes !== 'undefined') {
+      options.customTypes.forEach((pattern) => {
+        if (field.getAttribute('type') === pattern.type) {
+          isValid = !pattern.rule(field) ? false : isValid;
         }
         return isValid;
       });
@@ -71,9 +78,13 @@ export default class FormDataValidator {
 
     // Loop over custom rules to override browser default check
     if (typeof options.rules !== 'undefined') {
-      Object.keys(options.rules).forEach((rule) => {
-        if (field.id === rule) {
-          isValid = !options.rules[rule](field) ? false : isValid;
+      options.rules.forEach((pattern) => {
+        // Support for ie11
+        if (!Element.prototype.matches) {
+          Element.prototype.matches = Element.prototype.msMatchesSelector;
+        }
+        if (field.matches(pattern.field)) {
+          isValid = !pattern.rule(field) ? false : isValid;
         }
         return isValid;
       });
@@ -112,9 +123,5 @@ export default class FormDataValidator {
 
     const label = form.querySelector(`label[for=${field.id}]:not(:empty)`);
     if (label != null) label.classList.remove('error');
-  }
-
-  static validateAllForms(selector = 'form', options = {}) {
-    FormDataValidator.getAllForms(selector, options);
   }
 }
