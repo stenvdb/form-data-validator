@@ -1,6 +1,6 @@
 export default class FormDataValidator {
   static getAllForms(selector, options) {
-    Array.from([...document.querySelectorAll(selector)]).forEach((form) => {
+    Array.prototype.slice.call(document.querySelectorAll(selector)).forEach((form) => {
       FormDataValidator.validateForm(form, options);
     });
   }
@@ -32,7 +32,7 @@ export default class FormDataValidator {
   static isValid(form, options = {}) {
     let formvalid = true;
 
-    Array.from(form.querySelectorAll('input:not([type="hidden"]),select,textarea')).forEach((field) => {
+    Array.prototype.slice.call(form.querySelectorAll('input:not([type="hidden"]),select,textarea')).forEach((field) => {
       formvalid = !FormDataValidator
         .validateField(field, options, form) ? false : formvalid;
 

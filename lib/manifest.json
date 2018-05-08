@@ -1,3 +1,4 @@
 {
-  "app.js": "/app.bundle.js"
+  "app.js": "/app.bundle.js",
+  "app.js.map": "/app.bundle.js.map"
 }
