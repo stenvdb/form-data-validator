@@ -18,6 +18,7 @@ export default class FormDataValidator {
     form.noValidate = true;
 
     form.isValid = () => this.isValid(form, options);
+    form.getErrors = () => this.getErrors(form, options);
 
     form.addEventListener('submit', (event) => {
       const isValid = this.isValid(form, options);
@@ -29,12 +30,38 @@ export default class FormDataValidator {
     });
   }
 
+  static getErrors(form, options = {}) {
+    const errors = [];
+
+    if (form.isValid()) return [];
+
+    Array.prototype.slice.call(form.querySelectorAll('input:not([type="hidden"]),select,textarea')).forEach((field) => {
+      if (!FormDataValidator.validateField(field, options, form)) {
+        // Filter out only the ones that are true
+        const validityErrors = {};
+        for (const rule in field.validity) {
+          if (field.validity[rule]) {
+            validityErrors[rule] = field.validity[rule];
+          }
+        }
+
+        const error = {
+          id: field.id,
+          validityErrors
+        };
+
+        errors.push(error);
+      }
+    });
+
+    return errors;
+  }
+
   static isValid(form, options = {}) {
     let formvalid = true;
 
     Array.prototype.slice.call(form.querySelectorAll('input:not([type="hidden"]),select,textarea')).forEach((field) => {
-      formvalid = !FormDataValidator
-        .validateField(field, options, form) ? false : formvalid;
+      formvalid = !FormDataValidator.validateField(field, options, form) ? false : formvalid;
 
       field.addEventListener('blur', () => {
         formvalid = !FormDataValidator
@@ -94,18 +121,24 @@ export default class FormDataValidator {
       FormDataValidator.removeError(field, form);
     } else {
       // Loop over the errors and get the first one
-      let errorText = '';
-      for (const rule in field.validity) {
-        if (field.validity[rule]) {
-          const kebabRule = rule.replace(/[A-Z\u00C0-\u00D6\u00D8-\u00DE]/g, match => `- ${match.toLowerCase()}`);
-          errorText = field.getAttribute(`data-${kebabRule}`);
-          break;
-        }
-      }
+      const errorText = FormDataValidator.getError(field);
       FormDataValidator.showError(field, form, errorText);
     }
 
     return isValid;
+  }
+
+  static getError(field) {
+    // Loop over the errors and get the first one
+    let errorText = '';
+    for (const rule in field.validity) {
+      if (field.validity[rule]) {
+        const kebabRule = rule.replace(/[A-Z\u00C0-\u00D6\u00D8-\u00DE]/g, match => `- ${match.toLowerCase()}`);
+        errorText = field.getAttribute(`data-${kebabRule}`);
+        break;
+      }
+    }
+    return errorText;
   }
 
   static showError(field, form) {
