@@ -39,6 +39,10 @@ Default value: ```'div'```
 ### ```errorClass```
 Default value: ```'error'```
 
+### ```ignoreFields```
+Default value: ```'[]'```
+
+Add the `name` attribute of the fields you want to ignore. Useful for ignoring honeypot fields for example.
 
 ### ```customTypes```
 

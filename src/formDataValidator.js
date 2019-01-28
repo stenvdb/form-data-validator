@@ -13,7 +13,6 @@ export default class FormDataValidator {
 
   static validateForm(el, options = {}) {
     const config = Object.assign(defaultConfig, options);
-    console.log(config);
 
     let form = el;
     if (typeof form === 'string') {
@@ -41,21 +40,23 @@ export default class FormDataValidator {
     if (form.isValid()) return [];
 
     Array.prototype.slice.call(form.querySelectorAll('input:not([type="hidden"]),select,textarea')).forEach((field) => {
-      if (!FormDataValidator.validateField(field, options, form)) {
-        // Filter out only the ones that are true
-        const validityErrors = {};
-        for (const rule in field.validity) {
-          if (field.validity[rule]) {
-            validityErrors[rule] = field.validity[rule];
+      if (options.ignoreFields.indexOf(field.getAttribute('name')) === -1) {
+        if (!FormDataValidator.validateField(field, options, form)) {
+          // Filter out only the ones that are true
+          const validityErrors = {};
+          for (const rule in field.validity) {
+            if (field.validity[rule]) {
+              validityErrors[rule] = field.validity[rule];
+            }
           }
+
+          const error = {
+            id: field.id,
+            validityErrors
+          };
+
+          errors.push(error);
         }
-
-        const error = {
-          id: field.id,
-          validityErrors
-        };
-
-        errors.push(error);
       }
     });
 
@@ -65,19 +66,19 @@ export default class FormDataValidator {
   static isValid(form, options = {}) {
     let formvalid = true;
 
-    console.log(options);
-
     Array.prototype.slice.call(form.querySelectorAll('input:not([type="hidden"]),select,textarea')).forEach((field) => {
-      formvalid = !FormDataValidator.validateField(field, options, form) ? false : formvalid;
+      if (options.ignoreFields.indexOf(field.getAttribute('name')) === -1) {
+        formvalid = !FormDataValidator.validateField(field, options, form) ? false : formvalid;
 
-      field.addEventListener('blur', () => {
-        formvalid = !FormDataValidator
-          .validateField(field, options, form) ? false : formvalid;
-      });
-      field.addEventListener('change', () => {
-        formvalid = !FormDataValidator
-          .validateField(field, options, form) ? false : formvalid;
-      });
+        field.addEventListener('blur', () => {
+          formvalid = !FormDataValidator
+            .validateField(field, options, form) ? false : formvalid;
+        });
+        field.addEventListener('change', () => {
+          formvalid = !FormDataValidator
+            .validateField(field, options, form) ? false : formvalid;
+        });
+      }
     });
 
     return formvalid;
@@ -150,8 +151,7 @@ export default class FormDataValidator {
 
   static showError(field, form, options) {
     const parent = field.closest(options.parentSelector);
-
-    parent.classList.add(options.errorClass);
+    if (parent) parent.classList.add(options.errorClass);
 
     const label = form.querySelector(`label[for=${field.id}]:not(:empty)`);
     if (label != null) label.classList.add(options.errorClass);
@@ -159,7 +159,7 @@ export default class FormDataValidator {
 
   static removeError(field, form, options) {
     const parent = field.closest(options.parentSelector);
-    parent.classList.remove(options.errorClass);
+    if (parent) parent.classList.remove(options.errorClass);
 
     const label = form.querySelector(`label[for=${field.id}]:not(:empty)`);
     if (label != null) label.classList.remove(options.errorClass);

@@ -3,7 +3,8 @@ const config = {
   parentSelector: 'div',
   errorClass: 'error',
   customTypes: [],
-  rules: []
+  rules: [],
+  ignoreFields: []
 };
 
 export default config;
