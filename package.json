@@ -12,109 +12,80 @@
     "type": "git",
     "url": "git://github.com/stenvdb/form-data-validator.git"
   },
+  "custom": {
+    "localUrl": ""
+  },
   "platoonConfig": {
     "dirPublic": "lib",
     "dirClient": "src",
-    "entryPoint": "privacyBanner.js"
+    "entryPoint": "formDataValidator.js"
   },
   "babel": {
-    "extends": "./platoon-boilerplate/config/.babelrc"
+    "extends": "./boilerplate/config/.babelrc"
   },
   "eslintConfig": {
-    "extends": "./platoon-boilerplate/config/eslint.js"
+    "extends": "./boilerplate/config/eslint.js"
   },
   "stylelint": {
-    "extends": "./platoon-boilerplate/config/stylelint.js"
+    "extends": "./boilerplate/config/stylelint.js"
   },
   "scripts": {
-    "compile": "better-npm-run compile",
-    "compile:dev": "better-npm-run compile:dev",
-    "compile:prod": "better-npm-run compile:prod",
-    "server": "better-npm-run server",
-    "watch": "better-npm-run watch"
-  },
-  "betterScripts": {
-    "watch": {
-      "command": "babel-node platoon-boilerplate/bin/watch",
-      "env": {
-        "NODE_ENV": "development",
-        "DEBUG": "app:*"
-      }
-    },
-    "server": {
-      "command": "babel-node platoon-boilerplate/bin/dev-server",
-      "env": {
-        "NODE_ENV": "development",
-        "DEBUG": "app:*"
-      }
-    },
-    "compile": {
-      "command": "babel-node platoon-boilerplate/bin/compile",
-      "env": {
-        "DEBUG": "app:*"
-      }
-    },
-    "compile:dev": {
-      "command": "babel-node platoon-boilerplate/bin/compile",
-      "env": {
-        "NODE_ENV": "development",
-        "DEBUG": "app:*"
-      }
-    },
-    "compile:prod": {
-      "command": "babel-node platoon-boilerplate/bin/compile",
-      "env": {
-        "NODE_ENV": "production",
-        "BABEL_ENV": "production",
-        "DEBUG": "app:*"
-      }
-    }
+    "compile": "DEBUG=boilerplate:* NODE_ENV=development SERVER=0 babel-node boilerplate/bin/compile",
+    "compile:dev": "DEBUG=boilerplate:* NODE_ENV=development SERVER=0 babel-node boilerplate/bin/compile",
+    "compile:prod": "DEBUG=boilerplate:* NODE_ENV=production SERVER=0 babel-node boilerplate/bin/compile && npm run favicons",
+    "server": "DEBUG=boilerplate:* NODE_ENV=development SERVER=1 babel-node boilerplate/bin/dev-server",
+    "watch": "DEBUG=boilerplate:* NODE_ENV=development SERVER=0 babel-node boilerplate/bin/watch",
+    "favicons": "./node_modules/.bin/real-favicon generate ./src/img/favicon/faviconDescription.json faviconData.json ./www/assets/img/favicons && ./node_modules/.bin/real-favicon inject faviconData.json ./templates/_inc ./templates/_inc/favicons.html"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.46",
-    "@babel/core": "^7.0.0-beta.46",
-    "@babel/node": "^7.0.0-beta.46",
-    "@babel/plugin-transform-runtime": "^7.0.0-beta.46",
-    "@babel/preset-env": "^7.0.0-beta.46",
-    "@babel/preset-stage-0": "^7.0.0-beta.46",
-    "@babel/register": "^7.0.0-beta.46",
-    "autoprefixer": "^8.4.1",
-    "babel-loader": "^8.0.0-beta",
-    "better-npm-run": "^0.1.0",
-    "clean-webpack-plugin": "^0.1.19",
-    "css-loader": "^0.28.10",
-    "css-mqpacker": "^6.0.2",
-    "debug": "^3.0.1",
-    "eslint": "^4.18.2",
-    "eslint-config-airbnb": "^16.1.0",
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/node": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-stage-0": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "@fullhuman/postcss-purgecss": "^1.1.0",
+    "autoprefixer": "^9.1.5",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.0-beta.4",
+    "clean-webpack-plugin": "^1.0.0",
+    "cli-real-favicon": "0.0.7",
+    "css-loader": "^1.0.0",
+    "debug": "^4.0.1",
+    "dotenv": "^6.2.0",
+    "eslint": "^5.0.1",
+    "eslint-config-airbnb": "^17.0.0",
     "eslint-loader": "^2.0.0",
-    "eslint-plugin-compat": "^2.2.0",
-    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-compat": "^2.4.0",
+    "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.7.0",
-    "extract-text-webpack-plugin": "^4.0.0-beta.0",
-    "file-loader": "^1.1.11",
-    "ip": "^1.1.4",
-    "lodash": "^4.17.10",
-    "node-sass": "^4.9.0",
-    "optimize-css-assets-webpack-plugin": "^4.0.1",
-    "postcss-loader": "^2.1.4",
-    "postcss-normalize": "^4.0.0",
+    "eslint-plugin-react": "^7.10.0",
+    "file-loader": "^2.0.0",
+    "mini-css-extract-plugin": "^0.4.3",
+    "node-sass": "^4.9.3",
+    "postcss-loader": "^3.0.0",
+    "postcss-normalize": "^7.0.1",
     "raw-loader": "^0.5.1",
-    "resolve-url-loader": "^2.3.0",
-    "sass-loader": "^7.0.1",
-    "style-loader": "^0.21.0",
-    "stylelint": "^9.1.2",
+    "resolve-url-loader": "^3.0.0",
+    "sass-loader": "^7.0.3",
+    "shipit-assets": "^1.3.6",
+    "shipit-cli": "^4.1.2",
+    "shipit-db": "^1.8.5",
+    "style-loader": "^0.23.0",
+    "stylelint": "^9.3.0",
     "stylelint-config-standard": "^18.2.0",
-    "stylelint-webpack-plugin": "^0.10.4",
-    "svg-sprite-loader": "^3.7.1",
+    "stylelint-webpack-plugin": "^0.10.5",
+    "svg-sprite-loader": "^4.1.2",
     "svg-url-loader": "^2.3.2",
     "svgo": "^1.0.5",
     "svgo-loader": "^2.1.0",
+    "tailwindcss": "^0.7.2",
     "url-loader": "^1.0.1",
-    "webpack": "^4.6.0",
+    "webpack": "^4.14.0",
     "webpack-dev-server": "^3.1.4",
-    "webpack-manifest-plugin": "^2.0.2"
+    "webpack-manifest-plugin": "^2.0.3"
   },
   "dependencies": {}
 }

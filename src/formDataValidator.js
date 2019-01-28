@@ -1,5 +1,7 @@
+import defaultConfig from './config';
+
 export default class FormDataValidator {
-  static getAllForms(selector, options) {
+  static getAllForms(selector, options = {}) {
     Array.prototype.slice.call(document.querySelectorAll(selector)).forEach((form) => {
       FormDataValidator.validateForm(form, options);
     });
@@ -10,6 +12,9 @@ export default class FormDataValidator {
   }
 
   static validateForm(el, options = {}) {
+    const config = Object.assign(defaultConfig, options);
+    console.log(config);
+
     let form = el;
     if (typeof form === 'string') {
       form = document.querySelector(el);
@@ -17,15 +22,15 @@ export default class FormDataValidator {
 
     form.noValidate = true;
 
-    form.isValid = () => this.isValid(form, options);
-    form.getErrors = () => this.getErrors(form, options);
+    form.isValid = () => this.isValid(form, config);
+    form.getErrors = () => this.getErrors(form, config);
 
     form.addEventListener('submit', (event) => {
-      const isValid = this.isValid(form, options);
+      const isValid = this.isValid(form, config);
       if (!isValid) {
         event.preventDefault();
 
-        window.scrollTo(0, form.querySelector('.error').getBoundingClientRect().top);
+        if (config.scrollToFirstError) window.scrollTo(0, form.querySelector('.error').getBoundingClientRect().top);
       }
     });
   }
@@ -60,6 +65,8 @@ export default class FormDataValidator {
   static isValid(form, options = {}) {
     let formvalid = true;
 
+    console.log(options);
+
     Array.prototype.slice.call(form.querySelectorAll('input:not([type="hidden"]),select,textarea')).forEach((field) => {
       formvalid = !FormDataValidator.validateField(field, options, form) ? false : formvalid;
 
@@ -76,7 +83,7 @@ export default class FormDataValidator {
     return formvalid;
   }
 
-  static validateField(field, options = {}, form) {
+  static validateField(field, options, form) {
     let isValid = true;
 
     // First check native html 5 validation
@@ -118,11 +125,11 @@ export default class FormDataValidator {
     }
 
     if (isValid) {
-      FormDataValidator.removeError(field, form);
+      FormDataValidator.removeError(field, form, options);
     } else {
       // Loop over the errors and get the first one
       const errorText = FormDataValidator.getError(field);
-      FormDataValidator.showError(field, form, errorText);
+      FormDataValidator.showError(field, form, options);
     }
 
     return isValid;
@@ -141,20 +148,20 @@ export default class FormDataValidator {
     return errorText;
   }
 
-  static showError(field, form) {
-    const parent = field.parentNode;
+  static showError(field, form, options) {
+    const parent = field.closest(options.parentSelector);
 
-    parent.classList.add('error');
+    parent.classList.add(options.errorClass);
 
     const label = form.querySelector(`label[for=${field.id}]:not(:empty)`);
-    if (label != null) label.classList.add('error');
+    if (label != null) label.classList.add(options.errorClass);
   }
 
-  static removeError(field, form) {
-    const parent = field.parentNode;
-    parent.classList.remove('error');
+  static removeError(field, form, options) {
+    const parent = field.closest(options.parentSelector);
+    parent.classList.remove(options.errorClass);
 
     const label = form.querySelector(`label[for=${field.id}]:not(:empty)`);
-    if (label != null) label.classList.remove('error');
+    if (label != null) label.classList.remove(options.errorClass);
   }
 }
