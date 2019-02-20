@@ -86,6 +86,7 @@ export default class FormDataValidator {
 
   static validateField(field, options, form) {
     let isValid = true;
+    field.setCustomValidity('');
 
     // First check native html 5 validation
     if (typeof field.willValidate !== 'undefined') {
@@ -106,6 +107,7 @@ export default class FormDataValidator {
       options.customTypes.forEach((pattern) => {
         if (field.getAttribute('type') === pattern.type) {
           isValid = !pattern.rule(field) ? false : isValid;
+          if (!isValid) field.setCustomValidity(pattern.message || 'This field is invalid');
         }
         return isValid;
       });
@@ -120,6 +122,7 @@ export default class FormDataValidator {
         }
         if (field.matches(pattern.field)) {
           isValid = !pattern.rule(field) ? false : isValid;
+          if (!isValid) field.setCustomValidity(pattern.message || 'This field is invalid');
         }
         return isValid;
       });
@@ -129,24 +132,18 @@ export default class FormDataValidator {
       FormDataValidator.removeError(field, form, options);
     } else {
       // Loop over the errors and get the first one
-      const errorText = FormDataValidator.getError(field);
       FormDataValidator.showError(field, form, options);
+
+      // Check if there are custom validity message overrides
+      for (const rule in field.validity) {
+        const override = options.customValidityMessages.find(validity => validity.error === rule);
+        if (typeof override !== 'undefined') {
+          field.setCustomValidity(override.message);
+        }
+      }
     }
 
     return isValid;
-  }
-
-  static getError(field) {
-    // Loop over the errors and get the first one
-    let errorText = '';
-    for (const rule in field.validity) {
-      if (field.validity[rule]) {
-        const kebabRule = rule.replace(/[A-Z\u00C0-\u00D6\u00D8-\u00DE]/g, match => `- ${match.toLowerCase()}`);
-        errorText = field.getAttribute(`data-${kebabRule}`);
-        break;
-      }
-    }
-    return errorText;
   }
 
   static showError(field, form, options) {
