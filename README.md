@@ -1,5 +1,3 @@
-🔧 **Bear in mind that although I use this myself on a number of sites in production, I'm still working on getting the documentation right.** 🔧
-
 # form-data-validator
 A helper for working with the HTML5 [constraint validation API](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#the-constraint-validation-api). Providing some tools to easily extend or override native html5 form validation.
 
@@ -28,30 +26,34 @@ Alternatively you validate your own form.
 FormDataValidator.validateForm('.js-validate', { /* options */ });
 ```
 
+## Methods
+
+Method | Description
+--- | ---
+```FormDataValidator.validateForm(form, config)``` | ```form``` can be a selector string or an element
+```FormDataValidator.validateAllForms(forms, config)``` | ```forms``` can be a selector string or an element
+```isValid()``` | Returns ```true``` or ```false```
+```getErrors()``` | Returns an array containing the ```id``` of the bad input and a object representing the validityErrors.
+
 ## Options
 
-### ```scrollToFirstError```
-Default value: ```true```
+Option | Value
+--- | ---
+```scrollToFirstError``` | Default value: ```true```
+```parentSelector``` | Default value: ```'div'```
+```errorClass``` | Default value: ```'error'```
+```ignoreFields``` | Default value: ```'[]'```<br /> <br />Pass an array of strings representing the ```name``` attribute of the field you don't want to validate
+```customTypes``` | Default value: ```[]```<br /><br />Pass an array of objects with a ```type```, ```rule``` and optional ```message``` property. [See example](#customtypes-example)
+```rules``` | Default value: ```[]```<br /><br />Pass an array of objects with a ```type```, ```rule``` and optional ```message``` property. [See example](#rules-example)
+```customValidityMessages``` | Default value: ```[]```<br /><br />Pass an array of objects with a ```error``` and ```message``` property. The ```error```
 
-### ```parentSelector```
-Default value: ```'div'```
+## Examples
 
-### ```errorClass```
-Default value: ```'error'```
-
-### ```ignoreFields```
-Default value: ```'[]'```
-
-Add the `name` attribute of the fields you want to ignore. Useful for ignoring honeypot fields for example.
-
-### ```customTypes```
-
-Default value: ```[]```
+### ```customTypes``` example
 
 You can override the built-in html5 validation rules for input types. This can come in handy to provide a better email validation. By default `
 email@email` will validate because this is a valid email address format. You could implement your own email regular expression to override this. I reccomend the excellen [validator.js](https://github.com/chriso/validator.js/) library.
 
-#### Example
 ```
 import isEmail from 'validator/lib/isEmail';
 
@@ -65,13 +67,10 @@ FormDataValidator.validateForm('form', {
 
 This can also be used to provide a regular expression for password input fields, or a specific kind of url input type validation.
 
-### ```rules```
-
-Default value: ```[]```
+### ```rules``` example
 
 Add extra validation rules. These rules are mapped to your field's id. A few use cases for this would be a password field that must match a password repeat field. For this example to work make sure your password input type has a `data-equal-to` attribute:
 
-#### Example
 ```
 import equals from 'validator/lib/equals';
 
@@ -87,7 +86,6 @@ FormDataValidator.validateForm(form, {
 
 Another use case would be validating a chekcbox group where there has to be at least 1 checked input:
 
-#### Example
 ```
 const form = document.querySelector('form');
 FormDataValidator.validateForm(form, {
@@ -103,10 +101,16 @@ FormDataValidator.validateForm(form, {
 });
 ```
 
-## Methods
+### ```customValidityMessages``` example
 
-```FormDataValidator.validateForm()```
+Useful for overriding the default browser validity messages. The ```error``` property is a string that must match one of the [```ValidityState``` properties](https://developer.mozilla.org/en-US/docs/Web/API/ValidityState#Properties).
 
-```FormDataValidator.validateAllForms()```
-
-```isValid()```
+```
+const form = document.querySelector('form');
+FormDataValidator.validateForm(form, {
+  customValidityMessages: [{
+    error: 'valueMissing',
+    message: 'Hold on! This field needs to be filled in'
+  }]
+});
+```
