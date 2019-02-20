@@ -135,10 +135,12 @@ export default class FormDataValidator {
       FormDataValidator.showError(field, form, options);
 
       // Check if there are custom validity message overrides
-      for (const rule in field.validity) {
-        const override = options.customValidityMessages.find(validity => validity.error === rule);
-        if (typeof override !== 'undefined') {
-          field.setCustomValidity(override.message);
+      if (typeof options.customValidityMessages !== 'undefined') {
+        for (const rule in field.validity) {
+          const override = options.customValidityMessages.find(validity => validity.error === rule);
+          if (typeof override !== 'undefined') {
+            field.setCustomValidity(override.message);
+          }
         }
       }
     }
