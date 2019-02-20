@@ -4,7 +4,8 @@ const config = {
   errorClass: 'error',
   customTypes: [],
   rules: [],
-  ignoreFields: []
+  ignoreFields: [],
+  customValidityMessages: []
 };
 
 export default config;
