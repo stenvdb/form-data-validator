@@ -29,7 +29,7 @@ export default class FormDataValidator {
       if (!isValid) {
         event.preventDefault();
 
-        if (config.scrollToFirstError) window.scrollTo(0, form.querySelector('.error').getBoundingClientRect().top);
+        FormDataValidator.scrollToFirstError(form, config);
       }
     });
   }
@@ -162,5 +162,14 @@ export default class FormDataValidator {
 
     const label = form.querySelector(`label[for=${field.id}]:not(:empty)`);
     if (label != null) label.classList.remove(options.errorClass);
+  }
+
+  static scrollToFirstError(form, config) {
+    const firstError = form.querySelector(`.${config.errorClass}`);
+    if (firstError) {
+      const rect = firstError.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      if (config.scrollToFirstError) window.scrollTo(0, rect.top + scrollTop);
+    }
   }
 }
