@@ -39,7 +39,7 @@ export default class FormDataValidator {
 
     if (form.isValid()) return [];
 
-    Array.prototype.slice.call(form.querySelectorAll('input:not([type="hidden"]),select,textarea')).forEach((field) => {
+    Array.prototype.slice.call(form.querySelectorAll('input:not([type="hidden"]):not([type="submit"]),select,textarea')).forEach((field) => {
       if (options.ignoreFields.indexOf(field.getAttribute('name')) === -1) {
         if (!FormDataValidator.validateField(field, options, form)) {
           // Filter out only the ones that are true
