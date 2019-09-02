@@ -1,6 +1,6 @@
 {
   "name": "form-data-validator",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "A helper for working with the HTML5 constraint validation API",
   "author": "Sten Van den Bergh",
   "license": "MIT",
