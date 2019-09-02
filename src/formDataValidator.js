@@ -66,7 +66,7 @@ export default class FormDataValidator {
   static isValid(form, options = {}) {
     let formvalid = true;
 
-    Array.prototype.slice.call(form.querySelectorAll('input:not([type="hidden"]),select,textarea')).forEach((field) => {
+    Array.prototype.slice.call(form.querySelectorAll('input:not([type="hidden"]):not([type="submit"]),select,textarea')).forEach((field) => {
       if (options.ignoreFields.indexOf(field.getAttribute('name')) === -1) {
         formvalid = !FormDataValidator.validateField(field, options, form) ? false : formvalid;
 
