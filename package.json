@@ -74,7 +74,7 @@
     "shipit-cli": "^4.1.2",
     "shipit-db": "^1.8.5",
     "style-loader": "^0.23.0",
-    "stylelint": "^9.3.0",
+    "stylelint": "^15.10.1",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-webpack-plugin": "^0.10.5",
     "svg-sprite-loader": "^4.1.2",
